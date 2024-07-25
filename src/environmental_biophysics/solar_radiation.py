@@ -1,7 +1,9 @@
 """Environmental biophysics functions."""
+
 import math
 
 import numpy as np
+from numpy._typing import NDArray
 
 
 def get_height_weight_factor(
@@ -208,11 +210,11 @@ def get_solar_radiation_interception_sub_daily(
     atm_transm: float,
     atm_press: float,
     leaf_transm: float,
-    leaf_area_index: np.array,
+    leaf_area_index: NDArray,
     x_sp1: float,
     x_sp2: float,
-    angles_deg: np.array,
-) -> tuple[np.array, np.array]:
+    angles_deg: NDArray,
+) -> tuple[NDArray, NDArray]:
     """Return sub daily radiation interception for two species.
 
     Args:

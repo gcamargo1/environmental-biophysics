@@ -11,10 +11,42 @@ dependencies = [
 readme = "README.md"
 requires-python = "~= 3.12"
 
+[tool.ruff]
+target-version = "py312"
+line-length = 120  # use whatever number makes you happy
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/rules/
+select = [
+	"A",    # warn about shadowing built-ins
+	"E",    # style stuff, whitespaces
+	"F",    # important pyflakes lints
+	"I",    # import sorting
+	"N",    # naming
+	"T100", # breakpoints (probably don't want these in prod!)
+]
+# if you're feeling confident you can do:
+# select = ["ALL"]
+# and then manually ignore annoying ones:
+# ignore = [...]
+
+[tool.ruff.lint.isort]
+# so it knows to group first-party stuff last
+known-first-party = ["environmental_biophysics"]
+
+[tool.pyright]
+venvPath = "."          # rye installs the venv in the current dir
+venv = ".venv"          #       in a folder called `.venv`
+typeCheckingMode = "basic"
+# strict = ["**/*.py"] use 'strict' checking on all files
+pythonVersion = "3.12"  # if library, specify the _lowest_ you support
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.rye]
 managed = true
-dev-dependencies = []
+dev-dependencies = [
+    "pyright~=1.1.373",
+]
