@@ -1,6 +1,6 @@
 [project]
 name = "environmental-biophysics"
-dynamic = true
+dynamic = ["version"]
 description = "Add your description here"
 authors = [
     { name = "Gustavo Camargo", email = "" }
