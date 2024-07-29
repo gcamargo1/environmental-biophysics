@@ -1,5 +1,5 @@
-# .github/workflows/pr.yml
-name: pr
+# .github/workflows/push_workflow.yml
+name: push
 on:
   push
 jobs:
