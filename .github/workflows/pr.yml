@@ -8,11 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: eifinger/setup-rye@v3
+      - uses: jakebailey/pyright-action@v2
       - run: rye pin 3.12         # pin your Python version
 #      - run: |                    # abort if the lockfile changes
 #          rye sync
 #          [[ -n $(git diff --stat requirements.lock) ]] && exit 1
       - run: rye fmt --check      # check formatting is correct
       - run: rye lint             # and linting
-#      - run: rye run check        # typecheck too
+      - run: rye run check        # typecheck too
       - run: rye run test         # then run your tests!
