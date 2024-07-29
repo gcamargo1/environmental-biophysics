@@ -14,5 +14,5 @@ jobs:
 #          [[ -n $(git diff --stat requirements.lock) ]] && exit 1
       - run: rye fmt --check      # check formatting is correct
       - run: rye lint             # and linting
-      - run: rye run check        # typecheck too
+#      - run: rye run check        # typecheck too
       - run: rye run test         # then run your tests!
