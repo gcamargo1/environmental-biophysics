@@ -1,4 +1,4 @@
-# .github/workflows/push_workflow.yml
+# https://rdrn.me/postmodern-python/
 name: push
 on:
   push
