@@ -1,0 +1,24 @@
+# https://rdrn.me/postmodern-python/
+name: pr
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+      # after runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        py: [ '3.10', '3.11', '3.12' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: eifinger/setup-rye@v3
+      - run: rye pin $         # pin your Python version
+      - run: |                    # abort if the lockfile changes
+          rye sync
+          [[ -n $(git diff --stat requirements.lock) ]] && exit 1
+      - run: rye fmt --check      # check formatting is correct
+      - run: rye lint             # and linting
+      - run: rye run check        # typecheck too
+      - run: rye run test         # then run your tests!
