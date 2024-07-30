@@ -1,15 +1,15 @@
 # https://rdrn.me/postmodern-python/
 name: push
 on:
-  push
+  push:
+  pull_request:
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: eifinger/setup-rye@v3
       - run: rye pin 3.12         # pin your Python version
-#      - run: rye sync
       - run: rye fmt --check      # check formatting is correct
       - run: rye lint             # and linting
       - run: rye run test         # then run your tests!
