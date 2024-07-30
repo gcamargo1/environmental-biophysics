@@ -13,8 +13,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set up Pyhon ${{matrix.python-version}}
         uses: eifinger/setup-rye@v3
-#        with:
-#          python-version: ${{matrix.python-version}}
       - run: rye pin 3.12         # pin your Python version
       - run: rye fmt --check      # check formatting is correct
       - run: rye lint             # and linting
