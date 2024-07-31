@@ -5,6 +5,10 @@ import math
 import numpy as np
 from numpy._typing import NDArray
 
+from environmental_biophysics.environmental_constants import (
+    SUNSET_OR_SUNRISE_SOLAR_ZENITH_ANGLE,
+)
+
 
 def get_height_weight_factor(
     height_dom: float, dominant_fact: float, suppressed_fact: float, number_species: int
@@ -25,7 +29,8 @@ def get_height_weight_factor(
         Camargo, G.G.T. 2015. Ph.D. Dissertation. Penn State University
 
     Examples:
-    >>> res = get_height_weight_factor(height_dom=0.75, dominant_fact=1.52, suppressed_fact=0.56, number_species=3)
+    >>> res = get_height_weight_factor(height_dom=0.75, dominant_fact=1.52,
+    ...                                suppressed_fact=0.56, number_species=3)
     >>> assert res == 0.89
 
     >>> get_height_weight_factor(1.5, 1.52, 0.56, 3)
@@ -66,14 +71,17 @@ def get_optical_air_mass(atm_press: float, solar_zenith_angle: float) -> float:
         1.0441319774485631
     """
     sea_level_atm_prssr = 101.3
-    assert 38 < atm_press <= sea_level_atm_prssr
+    seven_thousant_meters_atm_prssr = 41
+    assert seven_thousant_meters_atm_prssr < atm_press <= sea_level_atm_prssr
     assert solar_zenith_angle >= 0
     deg_to_rad = math.pi / 180.0
     solar_zenith_angle *= deg_to_rad
     return atm_press / (sea_level_atm_prssr * math.cos(solar_zenith_angle))
 
 
-def get_solar_radiation_extinction_coeff_black_beam(solar_zenith_angle: float, x_area_ratio: float) -> float:
+def get_solar_radiation_extinction_coeff_black_beam(
+    solar_zenith_angle: float, x_area_ratio: float
+) -> float:
     """Solar radiation extinction coefficient of a canopy of black leaves.
 
     Return solar radiation extinction coefficient of a canopy of black leaves
@@ -101,7 +109,9 @@ def get_solar_radiation_extinction_coeff_black_beam(solar_zenith_angle: float, x
     return numerator / denominator
 
 
-def get_solar_radiation_extinction_coeff_black_diff(x_area_ratio: float, leaf_area_index: float) -> float:
+def get_solar_radiation_extinction_coeff_black_diff(
+    x_area_ratio: float, leaf_area_index: float
+) -> float:
     """Solar radiation extinction.
 
     Return solar radiation extinction coefficient of a canopy of black leaves for
@@ -132,7 +142,10 @@ def get_solar_radiation_extinction_coeff_black_diff(x_area_ratio: float, leaf_ar
     # Integration loop
     while True:
         angle = angle - diff_ang_center
-        transm_beam = math.exp(-get_solar_radiation_extinction_coeff_black_beam(angle, x_area_ratio) * leaf_area_index)
+        transm_beam = math.exp(
+            -get_solar_radiation_extinction_coeff_black_beam(angle, x_area_ratio)
+            * leaf_area_index
+        )
         transm_diff += 2 * transm_beam * math.sin(angle) * math.cos(angle) * diff_ang
         angle = angle + diff_ang_center + diff_ang
         if angle > (max_angle + diff_ang):
@@ -140,7 +153,9 @@ def get_solar_radiation_extinction_coeff_black_diff(x_area_ratio: float, leaf_ar
     return -math.log(transm_diff) / leaf_area_index
 
 
-def get_solar_beam_fraction(atm_press: float, solar_zenith_angle: float, atm_transmittance: float) -> float:
+def get_solar_beam_fraction(
+    atm_press: float, solar_zenith_angle: float, atm_transmittance: float
+) -> float:
     """Return radiation beam fraction.
 
     Args:
@@ -158,7 +173,7 @@ def get_solar_beam_fraction(atm_press: float, solar_zenith_angle: float, atm_tra
         Campbell, G. S., and J. M. Norman. 1998. Introduction to environmental
          biophysics. Springer, New York. Ch. 11
     """
-    assert 0 <= solar_zenith_angle <= 90
+    assert 0 <= solar_zenith_angle <= SUNSET_OR_SUNRISE_SOLAR_ZENITH_ANGLE
     assert 0 <= atm_transmittance <= 1
     deg_to_rad = math.pi / 180.0
     solar_zenith_angle *= deg_to_rad
@@ -167,7 +182,9 @@ def get_solar_beam_fraction(atm_press: float, solar_zenith_angle: float, atm_tra
     return solar_perpend_frac * math.cos(solar_zenith_angle)  # 11.8
 
 
-def get_solar_diffuse_fraction(atm_press: float, solar_zenith_angle: float, atm_transmittance: float) -> float:
+def get_solar_diffuse_fraction(
+    atm_press: float, solar_zenith_angle: float, atm_transmittance: float
+) -> float:
     """Return radiation diffuse fraction.
 
     Args:
@@ -185,13 +202,15 @@ def get_solar_diffuse_fraction(atm_press: float, solar_zenith_angle: float, atm_
         >>> get_solar_diffuse_fraction(101.3, 50, 0.45)
         0.10606799311188815
     """
-    assert 0 <= solar_zenith_angle <= 90
+    assert 0 <= solar_zenith_angle <= SUNSET_OR_SUNRISE_SOLAR_ZENITH_ANGLE
     assert 0 <= atm_transmittance <= 1
 
     deg_to_rad = math.pi / 180.0
     solar_zenith_angle *= deg_to_rad
     optical_air_mass = get_optical_air_mass(atm_press, solar_zenith_angle)  # 11.12
-    return 0.3 * (1 - atm_transmittance**optical_air_mass) * math.cos(solar_zenith_angle)  # 11.13
+    return (
+        0.3 * (1 - atm_transmittance**optical_air_mass) * math.cos(solar_zenith_angle)
+    )  # 11.13
 
 
 def get_solar_radiation_interception_sub_daily(
@@ -246,11 +265,21 @@ def get_solar_radiation_interception_sub_daily(
                     beam_frac[i]
                     / total_intercpt[i]
                     * math.exp(
-                        -(leaf_transm**0.5) * lai * (get_solar_radiation_extinction_coeff_black_beam(angle, x_sp1))
+                        -(leaf_transm**0.5)
+                        * lai
+                        * (
+                            get_solar_radiation_extinction_coeff_black_beam(
+                                angle, x_sp1
+                            )
+                        )
                     )
                     + diff_frac[i]
                     / total_intercpt[i]
-                    * math.exp(-(leaf_transm**0.5) * lai * get_solar_radiation_extinction_coeff_black_diff(x_sp1, lai))
+                    * math.exp(
+                        -(leaf_transm**0.5)
+                        * lai
+                        * get_solar_radiation_extinction_coeff_black_diff(x_sp1, lai)
+                    )
                 )
             ) * total_intercpt[i]
             sp2_intercpt_alone[i, j] = (
@@ -259,11 +288,21 @@ def get_solar_radiation_interception_sub_daily(
                     beam_frac[i]
                     / total_intercpt[i]
                     * math.exp(
-                        -(leaf_transm**0.5) * lai * (get_solar_radiation_extinction_coeff_black_beam(angle, x_sp2))
+                        -(leaf_transm**0.5)
+                        * lai
+                        * (
+                            get_solar_radiation_extinction_coeff_black_beam(
+                                angle, x_sp2
+                            )
+                        )
                     )
                     + diff_frac[i]
                     / total_intercpt[i]
-                    * math.exp(-(leaf_transm**0.5) * lai * get_solar_radiation_extinction_coeff_black_diff(x_sp2, lai))
+                    * math.exp(
+                        -(leaf_transm**0.5)
+                        * lai
+                        * get_solar_radiation_extinction_coeff_black_diff(x_sp2, lai)
+                    )
                 )
             ) * total_intercpt[i]
             canopy_intercpt[i, j] = (
