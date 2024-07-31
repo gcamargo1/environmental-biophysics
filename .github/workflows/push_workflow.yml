@@ -20,6 +20,7 @@ jobs:
       - uses: jakebailey/pyright-action@v2
       - run: rye run check        # typecheck too
 
+
 #  release-project:
 #    name: Release project
 #    runs-on: ubuntu-latest
