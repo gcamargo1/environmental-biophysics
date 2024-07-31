@@ -19,3 +19,14 @@ jobs:
       - run: rye run test         # then run your tests!
       - uses: jakebailey/pyright-action@v2
       - run: rye run check        # typecheck too
+  release-project:
+    name: Release project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create github release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: ${{ github.run_number}}
+          release_name: ${{ github.run_number}}
