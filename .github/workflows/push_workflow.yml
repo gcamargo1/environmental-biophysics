@@ -1,5 +1,5 @@
 # https://rdrn.me/postmodern-python/
-name: push
+name: push_pull_request
 on:
   push:
   pull_request:

@@ -16,7 +16,7 @@ source = "scm"
 
 [tool.ruff]
 target-version = "py312"
-line-length = 120  # use whatever number makes you happy
+line-length = 88  # use whatever number makes you happy
 
 [tool.ruff.lint]
 # https://docs.astral.sh/ruff/rules/
