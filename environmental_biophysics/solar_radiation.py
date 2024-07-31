@@ -15,7 +15,7 @@ def get_height_weight_factor(
     dominant_fact: float | NDArray,
     suppressed_fact: float | NDArray,
     number_species: int,
-) -> float:
+) -> float | NDArray:
     """Height domimance weight factor.
 
     Height dominance weighing factor calculated as a linear interpolation
