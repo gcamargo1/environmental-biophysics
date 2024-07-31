@@ -331,3 +331,120 @@ def get_solar_radiation_interception_sub_daily(
         sp1_intercpt_daily[i] = sp1_intercpt[:, i].sum() / total_intercpt.sum()
         sp2_intercpt_daily[i] = sp2_intercpt[:, i].sum() / total_intercpt.sum()
     return sp1_intercpt_daily, sp2_intercpt_daily
+
+
+def rad_intercpt_cycles(
+    crop_list: tuple[list[float | int], list[float | int], list[float]],
+) -> NDArray:
+    """Returns solar radiation intercepted on each species.
+
+    Args:
+        crop_list: list of species characteristics with three items:
+            radiation extinction coefficients
+            leaf area index [m2/m2]
+            plant height [m]
+
+    References:
+         Camargo, G.G.T. 2015. Ph.D. Dissertation. Penn State University.
+          https://etda.libraries.psu.edu/files/final_submissions/10226
+
+    Examples:
+        >>> rad_intercpt_cycles(([0.5,1,1],[0.5,1,2],[0.5,1,1]))
+        array([0.23758411, 0.30170163, 0.23758411])
+        >>> rad_intercpt_cycles(([0.5,1,0.5],[0.6,1.2,1],[0.7,1.4,1.5]))
+        array([0.13822214, 0.29363746, 0.45733724])
+    """
+    # Variables init
+    number_species = len(crop_list)
+    extinction_coeff = np.zeros(number_species)
+    leaf_area_index = np.zeros(number_species)
+    height = np.zeros(number_species)
+    transm_rad = np.zeros(number_species)  # if plant was alone
+    rad_intercpt_dom = np.zeros(number_species)  # dominant species
+    rad_intercpt_suppr = np.zeros(number_species)  # supressed species
+    rad_intercpt = np.zeros(number_species)  # species rad interception
+    transm_rad_others = np.ones(number_species)  # non-domnt sp rad transm
+    height_dom = np.zeros(number_species)  # species canopy dominance factor
+    dominant_fact = np.zeros(number_species)  # Dominant weight factor
+    suppressed_fact = np.zeros(number_species)  # Suppressed weight factor
+    hght_wght_fct = np.zeros(number_species)
+    hght_wght_fct_adj = np.zeros(number_species)
+    k_lai_prod = np.zeros(number_species)
+    k_lai_prod_adj = np.zeros(number_species)
+    total_transm = 1
+
+    # Read and store inputs
+    for i in range(number_species):
+        extinction_coeff[i] = crop_list[i][0]
+        leaf_area_index[i] = crop_list[i][1]
+        height[i] = crop_list[i][2]
+
+        # Transmitted radiation if all species had same height
+        transm_rad[i] = math.exp(-extinction_coeff[i] * leaf_area_index[i])
+
+        # Intercepted radiation if species was dominant
+        rad_intercpt_dom[i] = 1 - transm_rad[i]
+        k_lai_prod[i] = extinction_coeff[i] * leaf_area_index[i]
+
+    # Calculate total transmitance, interception and height dominance
+    for i in range(number_species):
+        # Total transmitance if all species had the same height
+        total_transm *= transm_rad[i]
+
+        # Height dominance factor
+        height_dom[i] = number_species * height[i] / height.sum()
+
+    # Total radiation interception if species had the same height
+    total_interception = 1 - total_transm
+
+    # All species but ith species rad transmission
+    for i in range(number_species):
+        all_species = list(range(number_species))  # list with all species
+        all_species.pop(i)  # remove ith species from list
+        all_species_but_ith = all_species  # list of non-dominant species
+        total_transm_but_ith_sp = 1  # sum of non-dominant species transmission
+        for j in all_species_but_ith:
+            total_transm_but_ith_sp *= transm_rad[j]
+
+        # Total transmitted radiation from all species but ith
+        transm_rad_others[i] = total_transm_but_ith_sp
+
+    # Radiation interception by suppressed species once all other species
+    # intercepts the radiation first
+    for i in range(number_species):
+        rad_intercpt_suppr[i] = rad_intercpt_dom[i] * transm_rad_others[i]
+
+    # Determine two extremes weighing factors: in dominant_fact species will
+    # intercept all radiation than it can based on k and LAI, in
+    # suppressed_factor, species will only intercept radiation after all the
+    # other species intercepted all rad that was possible
+    for i in range(number_species):
+        dominant_fact[i] = (
+            rad_intercpt_dom[i] / total_interception * k_lai_prod.sum() / k_lai_prod[i]
+        )
+        suppressed_fact[i] = (
+            rad_intercpt_suppr[i]
+            / total_interception
+            * k_lai_prod.sum()
+            / k_lai_prod[i]
+        )
+
+        # Based on species height determine a height weight factor in between
+        # dominant_fact and suppressed_fact values usin linear interpolation
+        hght_wght_fct[i] = get_height_weight_factor(
+            height_dom[i], dominant_fact[i], suppressed_fact[i], number_species
+        )
+        # Adjust extinction coefficient and leaf area index product
+        k_lai_prod_adj[i] = extinction_coeff[i] * leaf_area_index[i] * hght_wght_fct[i]
+
+    for i in range(number_species):
+        # Adjust height weighting factor
+        hght_wght_fct_adj[i] = (
+            hght_wght_fct[i] / k_lai_prod_adj.sum() * k_lai_prod.sum()
+        )
+
+        # Radiation interception for each species
+        rad_intercpt[i] = (
+            total_interception * hght_wght_fct_adj[i] * k_lai_prod[i] / k_lai_prod.sum()
+        )
+    return rad_intercpt
