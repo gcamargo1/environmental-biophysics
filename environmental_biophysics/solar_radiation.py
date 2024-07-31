@@ -11,7 +11,10 @@ from environmental_biophysics.environmental_constants import (
 
 
 def get_height_weight_factor(
-    height_dom: float, dominant_fact: float, suppressed_fact: float, number_species: int
+    height_dom: float | NDArray,
+    dominant_fact: float | NDArray,
+    suppressed_fact: float | NDArray,
+    number_species: int,
 ) -> float:
     """Height domimance weight factor.
 

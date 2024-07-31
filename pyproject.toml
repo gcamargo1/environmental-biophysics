@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "numpy~=2.0.1",
     "pyright~=1.1.374",
+    "black~=24.4.2",
 ]
 readme = "README.md"
 requires-python = "~= 3.12"
