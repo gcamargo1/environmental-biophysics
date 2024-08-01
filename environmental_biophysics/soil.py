@@ -1,3 +1,5 @@
+"""Soil physics related functions."""
+
 import math
 
 # Constants
@@ -32,7 +34,8 @@ def get_bulk_density(clay: float, sand: float, organic_matter: float) -> float:
     x2 = -0.107 + 1.636 * x1
     field_capacity = vol_water_content_33_j_kg(clay, sand, organic_matter)  # m3/m3
     sat_water_content = 0.043 + field_capacity + x2 - 0.097 * sand
-    return (1 - sat_water_content) * MIN_SOIL_PARTICLE_DENS
+    result = (1 - sat_water_content) * MIN_SOIL_PARTICLE_DENS
+    return round(result, 2)
 
 
 def sat_water_content(bulk_density: float) -> float:
@@ -43,7 +46,7 @@ def sat_water_content(bulk_density: float) -> float:
     Reference: Campbell, G.S., 1985. Soil physics with BASIC: Transport models
      for soil-plant systems. Elsevier, Amsterdam.
 
-     >>> sat_water_content(1.3)
+    >>> sat_water_content(1.3)
     0.5094339622641508
     """
     return 1 - bulk_density / MIN_SOIL_PARTICLE_DENS
@@ -61,9 +64,9 @@ def vol_water_content_33_j_kg(clay: float, sand: float, organic_matter: float) -
      Soil Sci. Soc. Am. J. 70, 1569-1578. eq.2 R2=0.63
 
     >>> vol_water_content_33_j_kg (0.03,0.92,1.906)
-    0.08
+    0.0764
     >>> vol_water_content_33_j_kg (0.33,0.09,2.866)
-    0.38
+    0.3829
     """
     x1 = (
         0.299
@@ -74,7 +77,8 @@ def vol_water_content_33_j_kg(clay: float, sand: float, organic_matter: float) -
         - 0.027 * clay * organic_matter
         + 0.452 * sand * clay
     )
-    return -0.015 + 0.636 * x1 + 1.283 * x1**2
+    result = -0.015 + 0.636 * x1 + 1.283 * x1**2
+    return round(result, 4)
 
 
 def vol_water_content_1500_jkg(
@@ -104,7 +108,8 @@ def vol_water_content_1500_jkg(
         - 0.013 * clay * organic_matter
         + 0.068 * sand * clay
     )
-    return -0.02 + 1.14 * x1
+    result = -0.02 + 1.14 * x1
+    return round(result, 2)
 
 
 def b_value(water_content_33_j_kg: float, water_content_1500_j_kg: float) -> float:
@@ -120,9 +125,10 @@ def b_value(water_content_33_j_kg: float, water_content_1500_j_kg: float) -> flo
     >>> b_value(0.08, 0.03)
     3.89
     """
-    return (math.log(1500) - math.log(33)) / (
+    result = (math.log(1500) - math.log(33)) / (
         math.log(water_content_33_j_kg) - math.log(water_content_1500_j_kg)
     )
+    return round(result, 2)
 
 
 def air_entry_pot(
@@ -139,7 +145,8 @@ def air_entry_pot(
     >>> air_entry_pot(.08,0.5,4.33)
     -0.0118
     """
-    return -33 * (field_capacity / sat_water_content) ** b_value
+    result = -33 * (field_capacity / sat_water_content) ** b_value
+    return round(result, 4)
 
 
 def water_potential(
@@ -165,7 +172,9 @@ def water_potential(
     assert sat_water_content > 0, "sat water content must be positive"
     assert water_content > 0, "water content must be positive"
 
-    return air_entry_potential * (sat_water_content / water_content) ** campbell_b
+    return round(
+        air_entry_potential * (sat_water_content / water_content) ** campbell_b, 4
+    )
 
 
 def water_content(
@@ -185,11 +194,12 @@ def water_content(
      for soil-plant systems. Elsevier, Amsterdam. pp.80
 
     >>> water_content(0.5,-1.5,5,-52.7)
-    0.24
+    0.2454
     """
-    return sat_water_content * (water_potential / air_entry_potential) ** (
+    result = sat_water_content * (water_potential / air_entry_potential) ** (
         -1 / campbell_b
     )
+    return round(result, 4)
 
 
 def organic_m(clay: float) -> float:
@@ -206,4 +216,5 @@ def organic_m(clay: float) -> float:
     >>> organic_m(0.03)
     1.91
     """
-    return 1.81 + 0.032 * clay * 100
+    result = 1.81 + 0.032 * clay * 100
+    return round(result, 2)

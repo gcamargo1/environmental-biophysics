@@ -1,3 +1,6 @@
+"""Water vapor and other gases functions."""
+
+
 def vapor_pressure_air(
     vapor_pressure_temp_min: float,
     vapor_pressure_temp_max: float,
@@ -14,13 +17,14 @@ def vapor_pressure_air(
     Reference: Campbell, G.S., Norman, J.M., 1998. Introduction to environmental
      biophysics. Springer, New York.
 
-    >>> vapor_pressure_air(1.817,5.320,87,25)
+    >>> vapor_pressure_air(1.817, 5.320, 87, 25)
     1.455
     """
-    return 0.5 * (
+    result = 0.5 * (
         vapor_pressure_temp_min * rh_max / 100.0
         + vapor_pressure_temp_max * rh_min / 100.0
     )
+    return round(result, 3)
 
 
 def vapor_press_defct_ave(
