@@ -9,6 +9,12 @@ dependencies = [
     "numpy~=2.0.1",
     "pyright~=1.1.374",
     "black~=24.4.2",
+    "pytest-cov~=5.0.0",
+    "mkdocs-material~=9.5.30",
+    "mkdocstrings~=0.25.2",
+    "pytest~=8.3.2",
+    "mkdocstrings-python~=1.10.7",
+    "mkdocs-macros-plugin~=1.0.5",
 ]
 readme = "README.md"
 requires-python = "~= 3.12"
@@ -134,6 +140,12 @@ managed = true
 dev-dependencies = [
     "pyright~=1.1.373",
     "pytest~=8.3.2",
+    "pytest-cov~=5.0.0",
+    "mkdocs-material~=9.5.30",
+    "mkdocstrings~=0.25.2",
+    "mkdocstrings-python~=1.10.7",
+    "black~=24.4.2",
+    "taskipy~=1.13.0",
 ]
 [tool.rye.scripts]
 fmt = "rye fmt"
@@ -141,3 +153,11 @@ lint = "rye lint --fix"
 check = "pyright"
 test = "rye test"
 all = { chain = ["fmt", "lint", "check", "test"] }
+docs = "mkdocs serve"
+test_cov = "pytest -s -x --cov=environmental_biophysics -vv"
+coverage_report = { cmd = "coverage html && open htmlcov/index.html"}
+
+[tool.taskipy.tasks]
+docs = "mkdocs serve"
+test = "pytest -s -x --cov=environmental_biophysics -vv"
+coverage_report = "coverage html && open htmlcov/index.html"

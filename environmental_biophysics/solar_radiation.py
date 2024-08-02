@@ -3,7 +3,7 @@
 import math
 
 import numpy as np
-from numpy._typing import NDArray
+from numpy.typing import NDArray
 
 from environmental_biophysics.environmental_constants import (
     SUNSET_OR_SUNRISE_SOLAR_ZENITH_ANGLE,
@@ -29,15 +29,15 @@ def get_height_weight_factor(
         number_species: number of species
 
     References:
-        Camargo, G.G.T. 2015. Ph.D. Dissertation. Penn State University
+        Camargo, G.G.T. 2015. Ph.D. Dissertation. Penn State University.
 
     Examples:
-    >>> res = get_height_weight_factor(height_dom=0.75, dominant_fact=1.52,
-    ...                                suppressed_fact=0.56, number_species=3)
-    >>> assert res == 0.89
+        >>> res = get_height_weight_factor(height_dom=0.75, dominant_fact=1.52,
+        ...                                suppressed_fact=0.56, number_species=3)
+        >>> assert res == 0.89
 
-    >>> get_height_weight_factor(1.5, 1.52, 0.56, 3)
-    1.13
+        >>> get_height_weight_factor(1.5, 1.52, 0.56, 3)
+        1.13
     """
     assert (height_dom and dominant_fact and suppressed_fact and number_species) > 0
 

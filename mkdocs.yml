@@ -1,0 +1,37 @@
+site_name: Environmental Biophysics
+repo_url: https://github.com/gcamargo1/environmental-biophysics
+repo_name: gcamargo1/environmental-biophysics
+edit_uri: tree/main/docs
+
+theme:
+  name: material
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.tasklist
+#  - pymdownx.superfences:
+#      custom_fences:
+#        - name: mermaid
+#          class: mermaid
+#          format: !!python/name:pymdownx.superfences.fence_code_format
+#  - pymdownx.emoji:
+#      emoji_index: !!python/name:materialx.emoji.twemoji
+#      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+extra_css:
+  - stylesheets/extra.css
+
+watch:
+   - environmental_biophysics
+
+plugins:
+- macros
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [environmental_biophysics]
+
+extra:
+  commands:
+    run: environmental-biophysics
