@@ -70,6 +70,7 @@ def get_optical_air_mass(atm_press: float, solar_zenith_angle: float) -> float:
     Examples:
         >>> get_optical_air_mass(100, 50)
         1.5357589603755304
+
         >>> get_optical_air_mass(91.6, 30)
         1.0441319774485631
     """
@@ -102,6 +103,7 @@ def get_solar_radiation_extinction_coeff_black_beam(
     Examples:
         >>> get_solar_radiation_extinction_coeff_black_beam(0.087, 0)
         0.055576591963547875
+
         >>> get_solar_radiation_extinction_coeff_black_beam(0.087, 2)
         0.7254823957447912
     """
@@ -132,6 +134,7 @@ def get_solar_radiation_extinction_coeff_black_diff(
     Examples:
         >>> get_solar_radiation_extinction_coeff_black_diff(2, 0.1)
         0.9710451784887358
+
         >>> get_solar_radiation_extinction_coeff_black_diff(0, 0.1)
         0.9099461266386164
     """
@@ -169,6 +172,7 @@ def get_solar_beam_fraction(
     Examples:
         >>> get_solar_beam_fraction(101.3, 0, 0.75)
         0.75
+
         >>> get_solar_beam_fraction(101.3, 50, 0.45)
         0.2892276326469122
 
@@ -202,6 +206,7 @@ def get_solar_diffuse_fraction(
     Examples:
         >>> get_solar_diffuse_fraction(101.3, 0, 0.75)
         0.075
+
         >>> get_solar_diffuse_fraction(101.3, 50, 0.45)
         0.10606799311188815
     """
@@ -351,6 +356,7 @@ def rad_intercpt_cycles(
     Examples:
         >>> rad_intercpt_cycles(([0.5,1,1],[0.5,1,2],[0.5,1,1]))
         array([0.23758411, 0.30170163, 0.23758411])
+
         >>> rad_intercpt_cycles(([0.5,1,0.5],[0.6,1.2,1],[0.7,1.4,1.5]))
         array([0.13822214, 0.29363746, 0.45733724])
     """

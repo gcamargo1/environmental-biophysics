@@ -114,6 +114,7 @@ def get_vol_water_content_1500_jkg(
     Examples:
         >>> get_vol_water_content_1500_jkg (0.03,0.92,1.906)
         0.03
+
         >>> get_vol_water_content_1500_jkg (0.33,0.09,2.866)
         0.21
     """
@@ -195,6 +196,7 @@ def get_water_potential(
     Examples:
         >>> get_water_potential (0.5, -1.5, 5, 0.25)
         -48.0
+
         >>> get_water_potential (0.20, -1.0, 4, 0.25)
         -0.4096
     """
@@ -248,6 +250,7 @@ def get_organic_matter(clay: float) -> float:
     Examples:
         >>> get_organic_matter(0.5)
         3.41
+
         >>> get_organic_matter(0.03)
         1.91
     """
