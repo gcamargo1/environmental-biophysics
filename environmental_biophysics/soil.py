@@ -256,3 +256,41 @@ def get_organic_matter(clay: float) -> float:
     """
     result = 1.81 + 0.032 * clay * 100
     return round(result, 2)
+
+
+def get_evap_lim_water_content(
+    field_capacity_water_content: float,
+    air_dry_water_content: float,
+    water_content: float,
+) -> float:
+    """Returns evaporation limitation based on water content [m3/m3].
+
+    Args:
+        field_capacity_water_content: field_capacity water content [m3/m3]
+        air_dry_water_content: air dry water content [m3/m3]
+        water_content: water content [m3/m3]
+
+    References:
+        Kemanian, A. R., and C. O. Stockle. 2010. C-Farm: A simple model to evaluate
+         the carbon balance of soil profiles. Eur. J. Agron. 32(1):22-29
+
+    Examples:
+        >>> get_evap_lim_water_content(0.35, 0.05, 0.25)
+        0.296
+
+        >>> get_evap_lim_water_content(0.25, 0.05, 0.15)
+        0.125
+    """
+    assert (
+        field_capacity_water_content and air_dry_water_content and water_content
+    ) >= 0
+    assert (
+        field_capacity_water_content and air_dry_water_content and water_content
+    ) <= 1
+    assert field_capacity_water_content > air_dry_water_content
+    assert field_capacity_water_content >= water_content
+    result = (
+        (water_content - air_dry_water_content)
+        / (field_capacity_water_content - air_dry_water_content)
+    ) ** 3
+    return round(result, 3)
