@@ -1,4 +1,4 @@
-"""Environmental biophysics functions."""
+"""Solar radiation functions."""
 
 import math
 

@@ -6,3 +6,5 @@
 [//]: # ([![Documentation Status]&#40;https://readthedocs.org/projects/notas-musicais/badge/?version=latest&#41;]&#40;https://notas-musicais.readthedocs.io/en/latest/?badge=latest&#41;)
 
 Environmental biophysics package for modeling.
+
+Documentation at: https://gcamargo1.github.io/environmental-biophysics/
