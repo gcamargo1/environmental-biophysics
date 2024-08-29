@@ -15,6 +15,7 @@ dependencies = [
     "pytest~=8.3.2",
     "mkdocstrings-python~=1.10.7",
     "mkdocs-macros-plugin~=1.0.5",
+    "pandas~=2.2.2",
 ]
 readme = "README.md"
 requires-python = "~= 3.12"
@@ -105,6 +106,10 @@ ignore = ["ANN202",
     "B023", # affects pandas lambda apply
     "PD015", # let's use pd.merge
     "COM812", # conflicts stuff
+    "FIX002", # asks to solve TODOs
+    "TD003", # asks for an issue link for TODOs
+    "ANN101", # depracated
+    "PLR0915", # too many statements >50
 ]
 
 [tool.ruff.lint.flake8-import-conventions.aliases]
@@ -119,7 +124,7 @@ seaborn = "sns"
 known-first-party = ["environmental_biophysics"]
 
 [tool.ruff.lint.per-file-ignores]
-"**/{tests,docs,tools}/*" = ["PLR2004", "ANN201"]
+"**/{tests,docs,tools}/*" = ["PLR2004", "ANN201", "ANN001"]
 
 [tool.pyright]
 venvPath = "."          # rye installs the venv in the current dir

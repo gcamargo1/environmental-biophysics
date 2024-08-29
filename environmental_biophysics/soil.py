@@ -2,11 +2,18 @@
 
 import math
 
+from numpy.typing import NDArray
+
 # Constants
 MIN_SOIL_PARTICLE_DENS = 2.65  # Mg/m3
+FIELD_CAPACITY_WP = -33  # J/kg
+PERMNT_WILT_POINT_WP = -1500  # J/kg
+WATER_DENSITY = 1000  # kg/m3
 
 
-def get_bulk_density(clay: float, sand: float, organic_matter: float) -> float:
+def get_bulk_density(
+    clay: float | NDArray, sand: float | NDArray, organic_matter: float | NDArray
+) -> float:
     """Returns bulk density (Mg/m3 or g/cm3)
 
     Args:
@@ -41,7 +48,7 @@ def get_bulk_density(clay: float, sand: float, organic_matter: float) -> float:
     return round(result, 2)
 
 
-def get_sat_water_content(bulk_density: float) -> float:
+def get_sat_water_content(bulk_density: float | NDArray) -> float:
     """Returns the saturated water content (m3/m3).
 
     Args:
@@ -60,7 +67,7 @@ def get_sat_water_content(bulk_density: float) -> float:
 
 
 def get_vol_water_content_33_j_kg(
-    clay: float, sand: float, organic_matter: float
+    clay: float | NDArray, sand: float | NDArray, organic_matter: float | NDArray
 ) -> float:
     """Returns the volumetric water content at field capacity (33 J/kg) (m3/m3).
 
@@ -94,7 +101,7 @@ def get_vol_water_content_33_j_kg(
 
 
 def get_vol_water_content_1500_jkg(
-    clay: float, sand: float, organic_matter: float
+    clay: float | NDArray, sand: float | NDArray, organic_matter: float | NDArray
 ) -> float:
     """Returns the volumetric water content at permanent wilting point (1500 J/kg).
 
@@ -131,7 +138,9 @@ def get_vol_water_content_1500_jkg(
     return round(result, 2)
 
 
-def get_b_value(water_content_33_j_kg: float, water_content_1500_j_kg: float) -> float:
+def get_b_value(
+    water_content_33_j_kg: float | NDArray, water_content_1500_j_kg: float | NDArray
+) -> float:
     """Return b soil parameter.
 
     Args:
@@ -154,7 +163,9 @@ def get_b_value(water_content_33_j_kg: float, water_content_1500_j_kg: float) ->
 
 
 def get_air_entry_pot(
-    field_capacity: float, sat_water_content: float, b_value: float
+    field_capacity: float | NDArray,
+    sat_water_content: float | NDArray,
+    b_value: float | NDArray,
 ) -> float:
     """Return air entry potential.
 
@@ -176,10 +187,10 @@ def get_air_entry_pot(
 
 
 def get_water_potential(
-    sat_water_content: float,
-    air_entry_potential: float,
-    campbell_b: float,
-    water_content: float,
+    sat_water_content: float | NDArray,
+    air_entry_potential: float | NDArray,
+    campbell_b: float | NDArray,
+    water_content: float | NDArray,
 ) -> float:
     """Returns Soil Water Potential (J/kg).
 
@@ -209,10 +220,10 @@ def get_water_potential(
 
 
 def get_water_content(
-    sat_water_content: float,
-    air_entry_potential: float,
-    campbell_b: float,
-    water_potential: float,
+    sat_water_content: float | NDArray,
+    air_entry_potential: float | NDArray,
+    campbell_b: float | NDArray,
+    water_potential: float | NDArray,
 ) -> float:
     """Returns Soil water content (m3/m3).
 
@@ -236,7 +247,7 @@ def get_water_content(
     return round(result, 4)
 
 
-def get_organic_matter(clay: float) -> float:
+def get_organic_matter(clay: float | NDArray) -> float:
     """Half of carbon saturation given by the original author, and converted to organic
      matter carbon = 0.58 * organic_matter.
 
@@ -259,9 +270,9 @@ def get_organic_matter(clay: float) -> float:
 
 
 def get_evap_lim_water_content(
-    field_capacity_water_content: float,
-    air_dry_water_content: float,
-    water_content: float,
+    field_capacity_water_content: float | NDArray,
+    air_dry_water_content: float | NDArray,
+    water_content: float | NDArray,
 ) -> float:
     """Returns evaporation limitation based on water content [m3/m3].
 
