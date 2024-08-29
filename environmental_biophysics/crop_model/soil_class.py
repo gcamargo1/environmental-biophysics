@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from environmental_biophysics.crop_model.crop_class import Crop
 from environmental_biophysics.soil import (
-    FIELD_CAPACITY_WP,
-    PERMNT_WILT_POINT_WP,
+    FIELD_CAPACITY_WATER_POT,
+    PERMNT_WILT_POINT_WATER_POT,
     WATER_DENSITY,
     get_air_entry_pot,
     get_b_value,
@@ -109,7 +108,7 @@ class Soil:
                     self.porosity[lyr],
                     self.air_entry_potential[lyr],
                     self.b_value[lyr],
-                    water_potential=FIELD_CAPACITY_WP,
+                    water_potential=FIELD_CAPACITY_WATER_POT,
                 )
             if not self.manual_permanent_wilt_point:
                 # calculated again using more accurate formula
@@ -117,7 +116,7 @@ class Soil:
                     self.porosity[lyr],
                     self.air_entry_potential[lyr],
                     self.b_value[lyr],
-                    PERMNT_WILT_POINT_WP,
+                    PERMNT_WILT_POINT_WATER_POT,
                 )
             assert (
                 self.perm_wilt_point[lyr] < self.field_capacity[lyr]
@@ -162,7 +161,7 @@ class Soil:
             )
         self.mean_field_capacity = self.mean_field_capacity / self.layer_thickness.sum()
 
-    def update_water_content(self, crop_list: list[Crop]) -> None:
+    def update_water_content(self, crop_list) -> None:  # noqa: ANN001
         """Updates soil water content based on each crop water uptake."""
         for crop in crop_list:
             if True:  # crop.planted_flag:

@@ -1,0 +1,2 @@
+﻿crop,first simulated doy,last simulated doy,first simulated year,last simulated year,campbell_max_full_cover_transpiration_mm_day,campbell_leaf_water_potential_at_onset_of_stomatal closure_j_kg,campbell_leaf_water_potential_at_wilting_point_j_kg,crop_root_depth_m
+1,0,100,0,0,10,-1100,-2000,1

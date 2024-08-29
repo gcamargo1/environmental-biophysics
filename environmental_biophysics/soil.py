@@ -6,8 +6,8 @@ from numpy.typing import NDArray
 
 # Constants
 MIN_SOIL_PARTICLE_DENS = 2.65  # Mg/m3
-FIELD_CAPACITY_WP = -33  # J/kg
-PERMNT_WILT_POINT_WP = -1500  # J/kg
+FIELD_CAPACITY_WATER_POT = -33  # J/kg
+PERMNT_WILT_POINT_WATER_POT = -1500  # J/kg
 WATER_DENSITY = 1000  # kg/m3
 
 
