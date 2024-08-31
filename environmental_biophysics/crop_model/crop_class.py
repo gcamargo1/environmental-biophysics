@@ -1,6 +1,5 @@
 import numpy as np
 
-from environmental_biophysics.crop_model.soil_class import Soil
 from environmental_biophysics.soil import FIELD_CAPACITY_WATER_POT
 
 
@@ -34,15 +33,11 @@ class Crop:
         self.expect_transp = 0
         self.cum_transp = 0
         self.cum_pot_transp = 0
-        self.root_dens = np.zeros(soil.total_layers)  # m root / m3 soil
-        self.root_fraction = np.zeros(soil.total_layers)  # m root / m soil
         self.light_intercpt = 0
         self.max_pot_transp = 0
-        for lyr in soil.layers:
-            self.root_dens[lyr] = 0
-            self.root_fraction[lyr] = 0
+        # TODO (Gustavo): putting crop root information with soil for now.
 
-    def water_uptake(self, soil: Soil) -> None:
+    def get_water_uptake(self, soil) -> None:  # noqa: ANN001
         """CropSyst/Campbell model daily water uptake.
 
         Args:
@@ -84,7 +79,7 @@ class Crop:
             root_activity[lyr] = 1
             salinity_factor[lyr] = 1
             root_cond_adj[lyr] = (
-                root_activity[lyr] * self.root_fraction[lyr] * salinity_factor[lyr]
+                root_activity[lyr] * soil.root_fraction[lyr] * salinity_factor[lyr]
             )
             root_hydr_cond[lyr] = tot_root_hydr_cond * root_cond_adj[lyr]
             tot_root_cond_adj += root_cond_adj[lyr]
