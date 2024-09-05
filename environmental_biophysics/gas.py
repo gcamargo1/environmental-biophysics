@@ -10,21 +10,26 @@ def get_vapor_pressure_air(
     """Return the vapor pressure of air (kPa).
 
     Args:
+    ----
         vapor_pressure_temp_min: saturated vapor pressure of min temperature (kPa)
         vapor_pressure_temp_max: saturated vapor pressure of max temperature (kPa)
         rh_max: max relative humidity (0 - 100)
         rh_min: min relative humidity (0 - 100)
 
     References:
+    ----------
         Campbell, G.S., Norman, J.M., 1998. Introduction to environmental biophysics.
          Springer, New York.
 
     Returns:
+    -------
         Vapor pressure of air (kPa).
 
     Examples:
+    --------
         >>> get_vapor_pressure_air(1.817, 5.320, 87, 25)
         1.455
+
     """
     result = 0.5 * (
         vapor_pressure_temp_min * rh_max / 100.0
@@ -36,12 +41,14 @@ def get_vapor_pressure_air(
 def get_vapor_press_defct_ave(
     max_sat_vap_press: float, min_sat_vap_press: float, air_vap_press: float
 ) -> float:
-    """Returns Average vapor pressure deficit.
+    """Return Average vapor pressure deficit.
 
     Args:
-        max_sat_vap_press:
-        min_sat_vap_press:
-        air_vap_press:
+    ----
+        max_sat_vap_press: max saturated vapor pressure
+        min_sat_vap_press: min saturated vapor pressure
+        air_vap_press: air vapor pressure
+
     """
     return (max_sat_vap_press + min_sat_vap_press) / 2.0 - air_vap_press
 

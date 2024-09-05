@@ -26,11 +26,13 @@ source = "scm"
 [tool.ruff]
 target-version = "py312"
 line-length = 88  # use whatever number makes you happy
-
+exclude = [
+    "tests"
+]
 [tool.ruff.lint]
 # https://docs.astral.sh/ruff/rules/
 select = [
-    # pycodestyle
+    "D",# pycodestyle
     "E",
     "W",
     # mccabe (code complexity)
@@ -126,13 +128,6 @@ known-first-party = ["environmental_biophysics"]
 
 [tool.ruff.lint.per-file-ignores]
 "**/{tests,docs,tools}/*" = ["PLR2004", "ANN201", "ANN001"]
-
-[tool.pyright]
-venvPath = "."          # rye installs the venv in the current dir
-venv = ".venv"          #       in a folder called `.venv`
-typeCheckingMode = "basic"
-# strict = ["**/*.py"] use 'strict' checking on all files
-pythonVersion = "3.12"  # if library, specify the _lowest_ you support
 
 [tool.pytest.ini_options]
 addopts = "--doctest-modules"

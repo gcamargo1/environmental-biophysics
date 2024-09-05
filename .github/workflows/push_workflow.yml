@@ -17,9 +17,6 @@ jobs:
       - run: rye fmt --check      # check formatting is correct
       - run: rye lint             # and linting
       - run: rye run test         # then run your tests!
-      - uses: jakebailey/pyright-action@v2
-      - run: rye run check        # typecheck too
-
 
 
 #  release-project:

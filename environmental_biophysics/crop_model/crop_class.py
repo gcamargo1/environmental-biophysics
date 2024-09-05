@@ -1,9 +1,13 @@
+"""Crop class."""
+
 import numpy as np
 
 from environmental_biophysics.soil import FIELD_CAPACITY_WATER_POT
 
 
 class Crop:
+    """Base class for a crop."""
+
     def __init__(self, crop_no, sim_length, crop_df, soil) -> None:  # noqa: ANN001
         """Crop instance."""
         crop_inputs = crop_df.loc[crop_no]
@@ -41,14 +45,17 @@ class Crop:
         """CropSyst/Campbell model daily water uptake.
 
         Args:
+        ----
             soil: soil class with properties
 
         References:
+        ----------
             Campbell, G. S. 1985. Soil physics with BASIC: Transport models for
              soil-plant systems. Developments in soil science. Elsevier, Amsterdam
             Campbell, G. S. 1991. Simulation of water uptake by plant roots. In
              Modeling plant and soil systems, 273-285. J. Hanks, and J. T. Ritchie,
              eds. Madison, WI: ASA/CSSA/SSSA.
+
         """
         daily_ref_evap_transp = soil.daily_ref_evap_transp
         root_hydr_cond = np.zeros(soil.total_layers)
@@ -152,8 +159,7 @@ class Crop:
                     * (soil.water_potential[lyr] - leaf_water_pot)
                     * transp_ratio
                 )
-                if self.water_uptake[lyr] < 0:
-                    self.water_uptake[lyr] = 0
+                self.water_uptake[lyr] = max(self.water_uptake[lyr], 0)
         self.crop_transp = self.water_uptake.sum()  # mm/day
         self.cum_transp += self.crop_transp
         self.cum_pot_transp += self.expect_transp

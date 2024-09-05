@@ -23,21 +23,25 @@ def get_height_weight_factor(
     species.
 
     Args:
+    ----
         height_dom: Species dominance factor based on height
         dominant_fact: Dominant weighing factor
         suppressed_fact: Suppressed weighing factor
         number_species: number of species
 
     References:
+    ----------
         Camargo, G.G.T. 2015. Ph.D. Dissertation. Penn State University.
 
     Examples:
+    --------
         >>> res = get_height_weight_factor(height_dom=0.75, dominant_fact=1.52,
         ...                                suppressed_fact=0.56, number_species=3)
         >>> assert res == 0.89
 
         >>> get_height_weight_factor(1.5, 1.52, 0.56, 3)
         1.13
+
     """
     assert (height_dom and dominant_fact and suppressed_fact and number_species) > 0
 
@@ -60,19 +64,23 @@ def get_optical_air_mass(atm_press: float, solar_zenith_angle: float) -> float:
      atmosphere to zenith path length.
 
     Args:
+    ----
         atm_press: [kPa]
         solar_zenith_angle: [deg]
 
     References:
+    ----------
         Campbell, G. S., and J. M. Norman. 1998. Introduction to environmental
          biophysics. Springer, New York. Eq. 11.12
 
     Examples:
+    --------
         >>> get_optical_air_mass(100, 50)
         1.5357589603755304
 
         >>> get_optical_air_mass(91.6, 30)
         1.0441319774485631
+
     """
     sea_level_atm_prssr = 101.3
     seven_thousant_meters_atm_prssr = 41
@@ -92,20 +100,24 @@ def get_solar_radiation_extinction_coeff_black_beam(
      with an ellipsoidal leaf area distribution for beam radiation.
 
     Args:
+    ----
         solar_zenith_angle: rad
         x_area_ratio: average area of canopy elements projected on to the horizontal
          plane divided by the average area projected on to a vertical plane
 
     References:
+    ----------
          Campbell, G.S., Norman, J.M., 1998. Introduction to environmental biophysics.
           Springer, New York. page 251. Eq. 15.4
 
     Examples:
+    --------
         >>> get_solar_radiation_extinction_coeff_black_beam(0.087, 0)
         0.055576591963547875
 
         >>> get_solar_radiation_extinction_coeff_black_beam(0.087, 2)
         0.7254823957447912
+
     """
     assert (solar_zenith_angle >= 0 and x_area_ratio) >= 0
     assert x_area_ratio >= 0
@@ -123,20 +135,24 @@ def get_solar_radiation_extinction_coeff_black_diff(
      diffuse radiation.
 
     Args:
+    ----
         x_area_ratio: average area of canopy elements projected on to the horizontal
          plane divided by the average area projected on to a vertical plane
         leaf_area_index: leaf area index [m3/m3]
 
     References:
+    ----------
         Campbell, G.S., Norman, J.M., 1998. Introduction to environmental biophysics.
          Springer, New York. Eq. 15.5
 
     Examples:
+    --------
         >>> get_solar_radiation_extinction_coeff_black_diff(2, 0.1)
         0.9710451784887358
 
         >>> get_solar_radiation_extinction_coeff_black_diff(0, 0.1)
         0.9099461266386164
+
     """
     assert (x_area_ratio and leaf_area_index) >= 0
     step_size = 90
@@ -165,11 +181,13 @@ def get_solar_beam_fraction(
     """Return radiation beam fraction.
 
     Args:
+    ----
         atm_press: [kPa]
         solar_zenith_angle: [deg]
         atm_transmittance: atmospheric transmittance - 0.75 for clear sky
 
     Examples:
+    --------
         >>> get_solar_beam_fraction(101.3, 0, 0.75)
         0.75
 
@@ -177,8 +195,10 @@ def get_solar_beam_fraction(
         0.2892276326469122
 
     References:
+    ----------
         Campbell, G. S., and J. M. Norman. 1998. Introduction to environmental
          biophysics. Springer, New York. Ch. 11
+
     """
     assert 0 <= solar_zenith_angle <= SUNSET_OR_SUNRISE_SOLAR_ZENITH_ANGLE
     assert 0 <= atm_transmittance <= 1
@@ -195,20 +215,24 @@ def get_solar_diffuse_fraction(
     """Return radiation diffuse fraction.
 
     Args:
+    ----
         atm_press: [kPa]
         solar_zenith_angle: [deg]
         atm_transmittance: 0.75 for clear sky
 
     References:
+    ----------
         Campbell, G. S., and J. M. Norman. 1998. Introduction to environmental
          biophysics. Springer, New York. Ch. 11
 
     Examples:
+    --------
         >>> get_solar_diffuse_fraction(101.3, 0, 0.75)
         0.075
 
         >>> get_solar_diffuse_fraction(101.3, 50, 0.45)
         0.10606799311188815
+
     """
     assert 0 <= solar_zenith_angle <= SUNSET_OR_SUNRISE_SOLAR_ZENITH_ANGLE
     assert 0 <= atm_transmittance <= 1
@@ -233,6 +257,7 @@ def get_solar_radiation_interception_sub_daily(
     """Return sub daily radiation interception for two species.
 
     Args:
+    ----
         atm_transm: atmospheric transmission [0-1]
         atm_press: atmospheric pressure
         leaf_transm: leaf transmission [0-1]
@@ -244,8 +269,10 @@ def get_solar_radiation_interception_sub_daily(
         angles_deg: angles range in degrees
 
     References:
+    ----------
          Campbell, G. S., and J. M. Norman. 1998. Introduction to environmental
           biophysics. Springer, New York.
+
     """
     deg_to_rad = math.pi / 180
     angles = angles_deg * deg_to_rad
@@ -341,24 +368,28 @@ def get_solar_radiation_interception_sub_daily(
 def rad_intercpt_cycles(
     crop_list: tuple[list[float | int], list[float | int], list[float]],
 ) -> NDArray:
-    """Returns solar radiation intercepted on each species.
+    """Return solar radiation intercepted on each species.
 
     Args:
+    ----
         crop_list: list of species characteristics with three items:
             radiation extinction coefficients
             leaf area index [m2/m2]
             plant height [m]
 
     References:
+    ----------
          Camargo, G.G.T. 2015. Ph.D. Dissertation. Penn State University.
           https://etda.libraries.psu.edu/files/final_submissions/10226
 
     Examples:
+    --------
         >>> rad_intercpt_cycles(([0.5,1,1],[0.5,1,2],[0.5,1,1]))
         array([0.23758411, 0.30170163, 0.23758411])
 
         >>> rad_intercpt_cycles(([0.5,1,0.5],[0.6,1.2,1],[0.7,1.4,1.5]))
         array([0.13822214, 0.29363746, 0.45733724])
+
     """
     # Variables init
     number_species = len(crop_list)
