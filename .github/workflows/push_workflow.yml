@@ -11,7 +11,7 @@ jobs:
         python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Pyhon ${{matrix.python-version}}
+      - name: Set up Python ${{matrix.python-version}}
         uses: eifinger/setup-rye@v3
       - run: rye pin 3.12         # pin your Python version
       - run: rye fmt --check      # check formatting is correct
