@@ -108,8 +108,9 @@ ignore = ["ANN202",
     "COM812", # conflicts stuff
     "FIX002", # asks to solve TODOs
     "TD003", # asks for an issue link for TODOs
-    "ANN101", # depracated
+    "ANN101", # deprecated
     "PLR0915", # too many statements >50
+    "PGH003",
 ]
 
 [tool.ruff.lint.flake8-import-conventions.aliases]

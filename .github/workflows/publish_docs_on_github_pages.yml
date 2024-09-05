@@ -1,4 +1,4 @@
-name: ci
+name: publish_docs_on_github_pages
 on:
   push:
     branches:
