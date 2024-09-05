@@ -1,3 +1,5 @@
+"""Soil class."""
+
 import numpy as np
 import pandas as pd
 
@@ -162,7 +164,7 @@ class Soil:
         self.mean_field_capacity = self.mean_field_capacity / self.layer_thickness.sum()
 
     def update_water_content(self, crop_list) -> None:  # noqa: ANN001
-        """Updates soil water content based on each crop water uptake."""
+        """Update soil water content based on each crop water uptake."""
         for crop in crop_list:
             if True:  # crop.planted_flag:
                 for lyr in self.layers:

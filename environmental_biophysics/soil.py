@@ -49,7 +49,7 @@ def get_bulk_density(
     field_capacity = get_vol_water_content_33_j_kg(clay, sand, organic_matter)  # m3/m3
     sat_water_content = 0.043 + field_capacity + x2 - 0.097 * sand
     result = (1 - sat_water_content) * MIN_SOIL_PARTICLE_DENS
-    return round(result, 2)  # type: ignore
+    return round(result, 2)
 
 
 def get_sat_water_content(bulk_density: float | NDArray) -> float:
@@ -71,7 +71,7 @@ def get_sat_water_content(bulk_density: float | NDArray) -> float:
 
     """
     result = 1 - bulk_density / MIN_SOIL_PARTICLE_DENS
-    return round(result, 3)  # type: ignore
+    return round(result, 3)
 
 
 def get_vol_water_content_33_j_kg(
@@ -109,7 +109,7 @@ def get_vol_water_content_33_j_kg(
         + 0.452 * sand * clay
     )
     result = -0.015 + 0.636 * x1 + 1.283 * x1**2
-    return round(result, 4)  # type: ignore
+    return round(result, 4)
 
 
 def get_vol_water_content_1500_jkg(
@@ -152,7 +152,7 @@ def get_vol_water_content_1500_jkg(
         + 0.068 * sand * clay
     )
     result = -0.02 + 1.14 * x1
-    return round(result, 2)  # type: ignore
+    return round(result, 2)
 
 
 def get_b_value(
@@ -208,7 +208,7 @@ def get_air_entry_pot(
 
     """
     result = -33 * (field_capacity / sat_water_content) ** b_value
-    return round(result, 4)  # type: ignore
+    return round(result, 4)
 
 
 def get_water_potential(
@@ -244,7 +244,7 @@ def get_water_potential(
     assert water_content > 0, "water content must be positive"
 
     return round(
-        air_entry_potential * (sat_water_content / water_content) ** campbell_b,  # type: ignore
+        air_entry_potential * (sat_water_content / water_content) ** campbell_b,
         4,
     )
 
@@ -278,7 +278,7 @@ def get_water_content(
     result = sat_water_content * (water_potential / air_entry_potential) ** (
         -1 / campbell_b
     )
-    return round(result, 4)  # type: ignore
+    return round(result, 4)
 
 
 def get_organic_matter(clay: float | NDArray) -> float:
@@ -303,7 +303,7 @@ def get_organic_matter(clay: float | NDArray) -> float:
 
     """
     result = 1.81 + 0.032 * clay * 100
-    return round(result, 2)  # type: ignore
+    return round(result, 2)
 
 
 def get_evap_lim_water_content(
@@ -345,4 +345,4 @@ def get_evap_lim_water_content(
         (water_content - air_dry_water_content)
         / (field_capacity_water_content - air_dry_water_content)
     ) ** 3
-    return round(result, 3)  # type: ignore
+    return round(result, 3)

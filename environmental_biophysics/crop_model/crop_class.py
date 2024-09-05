@@ -6,10 +6,9 @@ from environmental_biophysics.soil import FIELD_CAPACITY_WATER_POT
 
 
 class Crop:
-    """Base class for a crop."""
+    """Crop instance."""
 
     def __init__(self, crop_no, sim_length, crop_df, soil) -> None:  # noqa: ANN001
-        """Crop instance."""
         crop_inputs = crop_df.loc[crop_no]
         # Campbell max canopy transpiration, mm/d:
         self.campbell_max_daily_transp = crop_inputs[
